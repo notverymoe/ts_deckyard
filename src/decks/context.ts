@@ -1,0 +1,73 @@
+// // Copyright 2026 Natalie Baker // AGPLv3 // //
+
+import { useImmerReducer } from "use-immer";
+import type { Card } from "../mtgjson/database";
+import type { Draft } from "immer";
+import { useMemo, type Dispatch } from "preact/hooks";
+import { createDefaultDeckStore, deckListReducer, type DeckListsActions } from "./reducer";
+
+export type EntryProperties = {
+    qty: number | null,
+    tags: string[],
+};
+
+export type Deck = {
+    cards: Map<Card, EntryProperties>;
+}
+
+export type DeckStore = {
+    decks: Map<string, Deck>;
+}
+
+export class DeckStoreActions {
+
+    private dispatch: Dispatch<DeckListsActions>;
+
+    constructor(dispatch: Dispatch<DeckListsActions>) {
+        this.dispatch = dispatch;
+    }
+
+    public cardTransfer(target: string, source: string, card: Card, qty?: number) {
+        this.dispatch({kind: "cardTransfer", target, source, card, qty: qty ?? 1});
+    }
+
+    public cardModify(target: string, card: Card, modify: (properties: Draft<EntryProperties>) => void) {
+        this.dispatch({kind: "cardModify", target, card, modify});
+    }
+
+    public deckModify(target: string, modify: (deck: Draft<Deck>) => void) {
+        this.dispatch({kind: "deckModify", target, modify});
+    }
+
+    public deckDestroy(target: string) {
+        this.dispatch({kind: "deckDestroy", target});
+    }
+
+    public deckCreate(target: string, init?: (deck: Draft<Deck>) => void) {
+        this.dispatch({kind: "deckCreate", target, init});
+    }
+
+    public reset(init?: () => DeckStore) {
+        this.dispatch({kind: "reset", init});
+    }
+
+}
+
+// export const DeckListsContext = createContext<[DeckStore, DeckStoreActions]>([
+//     createDefaultDeckStore(),
+//     new DeckStoreActions(() => { throw new Error("Uninitialized deck list context state.") }),
+// ]);
+
+export function useNewDeckStore(init?: () => DeckStore): [DeckStore, DeckStoreActions] {
+    const [deckLists, dispatch] = useImmerReducer<DeckStore, DeckListsActions, unknown>(
+        deckListReducer, 
+        undefined, 
+        init ?? createDefaultDeckStore
+    );
+    const wrapped = useMemo(() => new DeckStoreActions(dispatch), [dispatch]);
+    return [deckLists, wrapped];
+}
+
+// export function useDeckStore() {
+//     return useContext(DeckListsContext);
+// }

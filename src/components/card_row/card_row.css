@@ -1,0 +1,68 @@
+/* // Copyright 2026 Natalie Baker // AGPLv3 // */
+
+.card-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 1ch;
+
+    /* position: absolute;
+    inset: 0; */
+    padding: 0 0.5ch;
+
+    color: var(--bs-body-color);
+    cursor: pointer;
+
+    border-radius: 0.33em;
+    border: 2px transparent solid;
+    transition: 
+        border-color 0.2s,
+        background-color 0.2s;
+
+    &:hover {
+        background-color: var(--bs-btn-hover-bg);
+    }
+
+    &:active {
+        background-color: unset;
+        border-color: var(--bs-btn-active-border-color);
+    }
+
+    &.selected {
+        border-color: var(--bs-btn-active-border-color);
+        font-weight: bold;
+    }
+    
+    .count {
+        white-space: nowrap;
+        flex-shrink: 0;
+        min-width: 2ch;
+    }
+
+    .name {
+        white-space: nowrap;
+        flex-shrink: 1;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        
+        user-select: none;
+    }
+
+    .cost {
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        margin-left: auto;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+
+        
+        user-select: none;
+    }
+}

@@ -1,0 +1,117 @@
+/* // Copyright 2026 Natalie Baker // AGPLv3 // */
+
+.cost-symbol-container {
+    position: relative;
+
+    display: inline-block;
+    
+    min-width:  1.5em;
+    min-height: 1em;
+    max-width:  1.5em;
+    max-height: 1em;
+    box-sizing: border-box;
+
+    border-radius: 0.33em;
+    overflow: hidden;
+
+    vertical-align: baseline;
+
+    &.bordered {
+        border: 1px solid black;
+    }
+
+    .cost-symbol-full {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cost-symbol-left {
+        position: absolute;
+        inset: 0;
+        right: 50%;
+        margin: auto;
+
+        width: 50%;
+        height: 100%;
+
+        display: flex;
+        place-items: center center;
+    }
+
+    .cost-symbol-right {
+        position: absolute;
+        inset: 0;
+        left: 50%;
+        margin: auto;
+
+        width: 50%;
+        height: 100%;
+
+        display: flex;
+        place-items: center center;
+    }
+
+    .bg-symbol-full {
+        position: absolute;
+        inset: 0;
+    }
+
+    .bg-symbol-left {
+        position: absolute;
+        inset: 0;
+        right: 50%;
+    }
+
+    .bg-symbol-right {
+        position: absolute;
+        inset: 0;
+        left: 50%;
+    }
+
+    .bg-symbol-colourless {
+        background-color: #bbb;
+    }
+
+    .bg-symbol-untap {
+        background-color: black;
+    }
+
+    .bg-symbol-white {
+        background-color: #ffc;
+    }
+
+    .bg-symbol-blue {
+        background-color: #9df;
+    }
+
+    .bg-symbol-black {
+        background-color: #999;
+    }
+
+    .bg-symbol-red {
+        background-color: #f97;
+    }
+
+    .bg-symbol-green {
+        background-color: #8d9;
+    }
+
+    .bg-symbol-snow {
+        background-color: #cef;
+    }
+
+    .bg-symbol-hwhite {
+        background-color: #ffc;
+        left: 50%;
+        border-radius: 0 0.33em 0.33em 0;
+    }
+
+    .bg-symbol-hred {
+        background-color: #f97;
+        left: 50%;
+    }
+
+}
