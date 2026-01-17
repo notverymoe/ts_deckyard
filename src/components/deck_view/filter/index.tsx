@@ -161,7 +161,7 @@ function FilterSearchTerm<K extends KeysMatching<FilterParams["advanced"], strin
 
 function FilterSetToggle({name, value, toggle, state, invert}: {invert?: boolean, name: string, value: string, toggle: (symbol: string) => void, state: Set<string>}) {
     return <div onClick={() => toggle(value)} className="filter-toggle">
-        <Form.Check checked={invert !== state.has(value)}/>
+        <Form.Check checked={(!!invert) !== state.has(value)}/>
         <>{name}</>
     </div>;
 }
@@ -264,22 +264,22 @@ function FilterLegalityGroup<K extends KeysMatching<FilterParams["advanced"], Se
             <Button 
                 size="sm" 
                 variant="primary" 
-                title={state.size === 0 ? "All options already selected" : "Select all selection"}
-                disabled={state.size === 0}
-                onClick={() => setState(state => { state[keyName] = new Set<string>(); })}
+                title={state.size === legalities.length ? "All options already selected" : "Select all selection"}
+                disabled={state.size === legalities.length}
+                onClick={() => setState(state => { state[keyName] = new Set<string>(legalities.map(v => v.key)); })}
             >Select All</Button>
             <Button 
                 size="sm" 
                 variant="danger" 
-                title={state.size === legalities.length ? "No options selected" : "Clear selection"}
-                disabled={state.size === legalities.length}
-                onClick={() => setState(state => { state[keyName] = new Set<string>(legalities.map(v => v.key)); })}
+                title={state.size === 0 ? "No options selected" : "Clear selection"}
+                disabled={state.size === 0}
+                onClick={() => setState(state => { state[keyName] = new Set<string>(); })}
             >Clear</Button>
         </div>
         <Collapse in={open}>
             <div className="filter-group-body-container bg-body-secondary">
                 <div className="filter-group-body">
-                    {Array.from(legalities.values(), v => <FilterSetToggle key={v} name={v.name} value={v.key} state={state} toggle={toggle} invert/>)}
+                    {Array.from(legalities.values(), v => <FilterSetToggle key={v} name={v.name} value={v.key} state={state} toggle={toggle}/>)}
                 </div>
             </div>
         </Collapse>

@@ -54,11 +54,11 @@ export function findSymbolAllIn(set: Set<string>, symbols: string) {
 
 export function findLegalityIn(set: Set<string>, legalities: Record<string, string>) {
     if (set.size <= 0) return true;
-    for(const [k, v] of Object.entries(legalities)) {
-        if (set.has(k)) continue;
-        if (v !== "Banned") return true;
+    for(const required of set) {
+        const legality = legalities[required] ?? "Banned";
+        if (legality === "Banned") return false; 
     }
-    return false;
+    return true;
 }
 
 export function findSymbolAnyIn(set: Set<string>, symbols: string) {
