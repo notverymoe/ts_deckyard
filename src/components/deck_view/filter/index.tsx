@@ -217,7 +217,7 @@ function FilterCostGroup<K extends KeysMatching<FilterParams["advanced"], Set<st
             >Clear</Button>
         </div>
         <Collapse in={open}>
-            <div className="filter-group-body-container">
+            <div className="filter-group-body-container bg-body-secondary">
                 <div className="filter-group-body">
                     <FilterCostToggle name="White" symbol="W" symbol_parts={["W"]} state={state} toggle={toggle}/>
                     <FilterCostToggle name="Blue"  symbol="U" symbol_parts={["U"]} state={state} toggle={toggle}/>
@@ -277,7 +277,7 @@ function FilterLegalityGroup<K extends KeysMatching<FilterParams["advanced"], Se
             >Clear</Button>
         </div>
         <Collapse in={open}>
-            <div className="filter-group-body-container">
+            <div className="filter-group-body-container bg-body-secondary">
                 <div className="filter-group-body">
                     {Array.from(legalities.values(), v => <FilterSetToggle key={v} name={v.name} value={v.key} state={state} toggle={toggle} invert/>)}
                 </div>

@@ -2,18 +2,22 @@
 
 export class PromiseWrapped<T> extends Promise<T> {
 
-    public resolve!: (value: T | PromiseLike<T>) => void;
-    public reject!: (reason?: any) => void;
+    public resolve: (value: T | PromiseLike<T>) => void;
+    public reject: (reason?: any) => void;
 
     constructor(executor?: (
         resolve: (value: T | PromiseLike<T>) => void, 
         reject: (reason?: any) => void
     ) => void) {
+        let innerResolve, innerReject;
         super((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject  = reject;
+            innerResolve = resolve;
+            innerReject  = reject;
             executor?.(resolve, reject);
         });
+
+        this.resolve = innerResolve!;
+        this.reject  = innerReject!;
     }
 
 }

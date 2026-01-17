@@ -13,6 +13,7 @@ import { useNewDeckViewStore } from "./components/deck_view/store";
 
 import { SearchIndexProvider, useNewSearchIndex } from "./search";
 import { DatabaseEnumInfoProvider, useNewDatabaseEnumInfo } from "./dbenum";
+import { MenuBar } from "./components/menubar";
 
 export function App({db}: {db: Record<string, Card>}) {
     // Enums // 
@@ -51,6 +52,13 @@ export function App({db}: {db: Record<string, Card>}) {
     // Application Root //
     return <DatabaseEnumInfoProvider enumInfo={dbEnumInfo}>
         <SearchIndexProvider searchIndex={searchIndex}>
+            <div className="app-toolbar">
+                <MenuBar
+                    database={db}
+                    deckStore={deckStore}
+                    deckStoreActions={deckStoreActions}
+                />
+            </div>
             <div 
                 className="app-content"
                 ref={setRootRef} 
