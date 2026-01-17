@@ -26,11 +26,11 @@ function AppRoot() {
     }
 
     if (isAsyncStatusFailure(dbStatus)) {
-        return <>
+        return <div className="p-4">
             <h1>Database Error Occured</h1>
             <p>{formatError(dbStatus.error)}</p>
-        </>;
+        </div>;
     }
 
-    return <h1>Loading...</h1>
+    return <div className="p-4"><h1>Loading...</h1></div>;
 }
