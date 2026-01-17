@@ -3,6 +3,7 @@
 import type { ComponentChildren } from "preact";
 import { useMemo } from "preact/hooks";
 import { Button, ButtonGroup } from "react-bootstrap";
+
 import type { DeckStoreActions } from "../../decks/context";
 import type { Card } from "../../mtgjson/database";
 
@@ -100,6 +101,7 @@ function ButtonMoveToDeck({source, target, selected, action, children}: {
     );
 
     return <Button 
+        style={{display: "flex", alignItems: "center", justifyContent: "center", width: "2.25em", height: "2.25em"}}
         disabled={!!error}
         title={error ? error : `Send to ${target}`}
         onClick={_ev => {

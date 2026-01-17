@@ -1,18 +1,33 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import { Document, Encoder } from "flexsearch";
+
 import type { Card } from "../mtgjson/database";
 
-export function createCardSearchIndex(cards: Card[]) {
+export function createCardSearchIndex(cards: Card[]): Document<any> {
 
-    const index = new Document({
+    const index = new Document<Card>({
         id: "uid",
         index: [
-            "name",
-            "manaCost",
-            "faces:text",
-            "faces:type",
-            "faces:rulings:text",
+            { 
+                field: "name" 
+            },
+            { 
+                field: "manaCost", 
+                custom: (card: Card) =>  card.faces[0].manaCost ?? ""
+            },
+            {
+                field: "text",
+                custom: (card: Card) => card.faces.map(face => face.text).join("\n\n")
+            },
+            {
+                field: "type",
+                custom: (card: Card) => card.faces.map(face => face.type).join("\n\n")
+            },
+            {
+                field: "rulings", 
+                custom: (card: Card) => card.faces[0].rulings?.map(v => v.text).join("\n\n") ?? ""
+            },
         ],
         tokenize: "forward",
         encoder: new Encoder({
@@ -28,7 +43,7 @@ export function createCardSearchIndex(cards: Card[]) {
                 char: ["{",  "}", "/", "+", "-"]
             }
         }),
-        resolution: 1,
+        resolution: 5,
         
     });
 

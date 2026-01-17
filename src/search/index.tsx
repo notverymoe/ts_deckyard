@@ -1,8 +1,10 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import { useContext, useMemo } from "preact/hooks";
-import type { Card } from "../mtgjson/database";
 import { createContext, type ComponentChildren } from "preact";
+
+import type { Card } from "../mtgjson/database";
+
 import { createCardSearchIndex } from "./flexsearch";
 
 const SearchIndexContext = createContext<ReturnType<typeof useNewSearchIndex> | null>(null);

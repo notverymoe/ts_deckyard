@@ -3,6 +3,7 @@
 import "./symbols.css";
 
 import { useMemo } from "preact/hooks";
+
 import SvgSymbols from "/icons/cost-symbols.svg";
 
 const REGEX_COST_SYMBOLS = /{(.+?)}/g;
@@ -57,6 +58,7 @@ const BG_RED        = "bg-symbol-red";
 const BG_GREEN      = "bg-symbol-green";
 const BG_HWHITE     = "bg-symbol-hwhite";
 const BG_HRED       = "bg-symbol-hred";
+const BG_SNOW       = "bg-symbol-snow";
 
 type SymbolData = {
     id: string,
@@ -100,7 +102,6 @@ const COST_SYMBOLS_KNOWN: Record<string, SymbolData> = {
     "T":  {id: "T", bg: BG_COLOURLESS},
     "C":  {id: "C", bg: BG_COLOURLESS},
     "X":  {id: "X", bg: BG_COLOURLESS},
-    "S":  {id: "S", bg: BG_COLOURLESS},
     "A":  {id: "A", bg: BG_COLOURLESS},
     "P":  {id: "P", bg: BG_COLOURLESS},
     "Z":  {id: "Z", bg: BG_COLOURLESS},
@@ -109,6 +110,7 @@ const COST_SYMBOLS_KNOWN: Record<string, SymbolData> = {
     "∞":  {id: "INF", bg: BG_COLOURLESS},
     "½":  {id: "HALF", bg: BG_COLOURLESS},
 
+    "S":  {id: "S", bg: BG_SNOW},
     "Q":  {id: "Q",  bg: BG_UNTAP},
     "HW": {id: "HW", bg: BG_HWHITE},
     "HR": {id: "HR", bg: BG_HRED},
@@ -187,7 +189,7 @@ export function SymbolSet({symbols}: {symbols: string[][]}) {
     return <>{symbols_parsed.map(([symbols, backgrounds], i) => <SymbolRaw key={i} symbols={symbols} backgrounds={backgrounds}/>)}</>;
 }
 
-export function Symbol({symbol_parts}: {symbol_parts: string[]}) {
+export function SymbolSingle({symbol_parts}: {symbol_parts: string[]}) {
     const [symbols, backgrounds] = useMemo(() => getCostSymbolData(symbol_parts), [symbol_parts]);
     return <SymbolRaw symbols={symbols} backgrounds={backgrounds}/>
 }

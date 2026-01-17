@@ -1,8 +1,10 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import { useEffect, useState, type Inputs } from "preact/hooks";
-import type { AsyncStatus, AsyncStatusFailure } from "./signal_async";
+
 import { CancellationToken } from "../util/promise";
+
+import type { AsyncStatus, AsyncStatusFailure } from "./signal_async";
 
 export type Cancellable<T> = T & {
     token: CancellationToken | null

@@ -1,10 +1,12 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import { useCallback, useMemo } from "preact/hooks";
+
 import type { EntryProperties } from "../../decks/context";
 import type { Card } from "../../mtgjson/database";
 import { VirtualList } from "../../preact/virtual_list";
 import { rootLineHeightToPixels } from "../../util/size";
+
 import { CardRow } from "../card_row";
 
 export function CardList({cards, selected, setSelected}: {

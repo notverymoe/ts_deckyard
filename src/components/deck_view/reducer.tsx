@@ -1,9 +1,11 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import type { Draft } from "immer";
-import type { DeckView, DeckViewFilter, DeckViewStore } from "./store";
+
 import type { ImmerReturn } from "../../util/immer";
 import type { Card } from "../../mtgjson/database";
+
+import type { DeckView, DeckViewFilter, DeckViewStore } from "./store";
 
 export type DeckViewActions = DeckViewActionSetActive | 
     DeckViewActionSetSelectedDeck | 

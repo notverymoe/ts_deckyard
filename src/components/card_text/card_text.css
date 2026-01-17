@@ -1,7 +1,51 @@
 /* // Copyright 2026 Natalie Baker // AGPLv3 // */
 
+.card-text-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .tab-content {
+        flex-shrink: 1;
+        overflow: auto;
+        min-height: 0;
+    }
+}
+
 .card-text-section {
     padding: 0.5em 1em;
+
+    .card-text-legality {
+        display: grid;
+        grid-template-columns: 1fr 9ch 1fr 9ch;
+        grid-auto-rows: 1fr;
+
+        .entry {
+            border: 1px solid var(--bs-gray-dark);
+
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0.1em 0.5ch;
+
+            &.title {
+                font-weight: bold;
+            }
+
+            &.format {
+                text-align: right;
+            }
+
+            &.status {
+                text-align: center;
+
+                &.legal { color: var(--bs-green); }
+                &.restricted { color: var(--bs-orange); }
+                &.banned { color: var(--bs-red); }
+            }
+        }
+    }
 
     .card-text-face-title {
         display: flex;

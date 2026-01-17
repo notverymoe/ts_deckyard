@@ -3,12 +3,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { render } from 'preact';
-
 import { enableArrayMethods, enableMapSet } from 'immer';
-import { loadCardsByUID } from './mtgjson/database';
 
+import { loadCardsByUID } from './mtgjson/database';
 import { isAsyncStatusFailure, isAsyncStatusSuccess, signalAsync } from './preact/signal_async';
 import { formatError } from './util/error';
+
 import { App } from './app';
 
 history.scrollRestoration = "manual";

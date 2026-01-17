@@ -2,17 +2,20 @@
 
 import "./deck_view.css";
 
+import { Form, InputGroup } from "react-bootstrap";
 import { useCallback, useMemo } from "preact/hooks";
-import { DeckViewStoreActions, type DeckView, type DeckViewStore } from "./store";
+
 import type { DeckStore, DeckStoreActions, EntryProperties } from "../../decks/context";
 import { useMemoStable } from "../../preact/use_memo_stable";
 import type { Card } from "../../mtgjson/database";
 import { joinClassNames } from "../../preact/class_names";
+
 import { CardText } from "../card_text";
 import { CardList } from "../card_list";
 import { Toolbar } from "../toolbar";
-import { Form, InputGroup } from "react-bootstrap";
-import { useSearchIndex } from "../../search";
+
+import { DeckViewStoreActions, type DeckView, type DeckViewStore } from "./store";
+import { FilterOptions } from "./filter";
 
 export function DeckViewMemoized({index, deckViews, deckViewActions, deckStore, deckStoreActions}: {
     index: number,
@@ -54,7 +57,7 @@ export function DeckViewMemoized({index, deckViews, deckViewActions, deckStore, 
         [index, isActive, deckOptions, view, deckViewActions, deckFiltered, deckStoreActions]
     );
 
-    return <div class="deck-view-column-container">{element}</div>;
+    return <div className="deck-view-column-container">{element}</div>;
 }
 
 export function DeckViewColumn({index, isActive, deckOptions, deckView, deckViewActions, cards, deckStoreActions}: {
@@ -69,7 +72,11 @@ export function DeckViewColumn({index, isActive, deckOptions, deckView, deckView
     cards: [Card, EntryProperties][],
     deckStoreActions: DeckStoreActions,
 }) {
-    const searchIndex = useSearchIndex();
+
+    const cardCount = useMemo(
+        () => cards.map(([_, p]) => p.qty ?? 1).reduce((p, c) => p + c, 0) ?? 0, 
+        [cards]
+    );
 
     const selectedCard = deckView.selectedCard;
     const setSelected = useCallback(
@@ -82,43 +89,30 @@ export function DeckViewColumn({index, isActive, deckOptions, deckView, deckView
     );
 
     return <div 
-        class={joinClassNames(["deck-view-column", isActive && "active"])}
+        className={joinClassNames(["deck-view-column", isActive && "active"])}
         onClick={() => deckViewActions.setActive(index)}
     >
-        <div class="deck-view-column-header">
+        <div className="deck-view-column-header">
             <DeckSelector 
+                cardCount={cardCount}
                 item={deckView.selectedDeck ?? ""} 
                 setItem={changeDeckTo}
                 items={deckOptions}
             />
-            <Form.Control
-                type="text"
-                onChange={ev => {
-                    const term = ev.currentTarget.value.trim();
-                    const results = searchIndex.search(term, {merge: true}).map(v => v.id);
-                    
-                    if (term.length <= 0) {
-                        deckViewActions.setViewFilter(index, null);
-                    } else {
-                        deckViewActions.setViewFilter(index, function*(cards) {
-                            for(const entry of cards) {
-                                if(results.includes(entry[0].uid)) yield entry;
-                            }
-                        })
-                    }
-                    
-                }}
+            <FilterOptions
+                index={index}
+                deckViewActions={deckViewActions}
             />
         </div>
-        <div class="deck-view-column-deck">
-            <div class="deck-view-column-deck-toolbar">
+        <div className="deck-view-column-deck">
+            <div className="deck-view-column-deck-toolbar">
                 <Toolbar
                     source={deckView.selectedDeck}
                     action={deckStoreActions}
                     selected={selectedCard}
                 />
             </div>
-            <div class="deck-view-column-deck-container">
+            <div className="deck-view-column-deck-container">
                 <CardList 
                     cards={cards} 
                     selected={selectedCard}
@@ -126,23 +120,28 @@ export function DeckViewColumn({index, isActive, deckOptions, deckView, deckView
                 />
             </div>
         </div>
-        <div class="deck-view-column-info">
+        <div className="deck-view-column-info">
             {selectedCard && <CardText card={selectedCard}/>}
         </div>
     </div>;
 }
 
 function DeckSelector({
+    cardCount,
     item,
     items,
     setItem,
 }: {
+    cardCount: number,
     item: string,
     items: string[],
     setItem: (id: string) => void,
 }) {
     return <InputGroup size="lg">
-        <InputGroup.Text>View</InputGroup.Text>
+        <InputGroup.Text style={{minWidth: "13ch"}}>
+            <span style={{width: "100%"}}/>
+            {cardCount.toLocaleString()} Cards
+        </InputGroup.Text>
         <Form.Select value={item} onChange={ev => setItem(ev.currentTarget.value)}>
             {items.map(id => <option id={id} value={id}>{id}</option>)}
         </Form.Select>

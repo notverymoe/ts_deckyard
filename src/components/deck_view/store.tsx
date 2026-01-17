@@ -1,9 +1,11 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import { useMemo, type Dispatch } from "preact/hooks";
+import { useImmerReducer } from "use-immer";
+
 import { type EntryProperties } from "../../decks/context";
 import type { Card } from "../../mtgjson/database";
-import { useImmerReducer } from "use-immer";
+
 import { type DeckViewActions, deckStoreReducer } from "./reducer";
 
 export type DeckViewStore = {

@@ -2,16 +2,26 @@
 
 import "./app.css";
 
-import { useNewDeckStore, type Deck, type DeckStore, type EntryProperties } from './decks/context';
 import { useMemo, useState } from 'preact/hooks';
+
+import { useNewDeckStore, type Deck, type DeckStore, type EntryProperties } from './decks/context';
 import { getTextSizes } from './util/size';
 import { useElementWidth } from './preact/use_size';
 import type { Card } from "./mtgjson/database";
 import { DeckViewMemoized } from "./components/deck_view";
 import { useNewDeckViewStore } from "./components/deck_view/store";
+
 import { SearchIndexProvider, useNewSearchIndex } from "./search";
+import { DatabaseEnumInfoProvider, useNewDatabaseEnumInfo } from "./dbenum";
 
 export function App({db}: {db: Record<string, Card>}) {
+    // Enums // 
+    const dbEnumInfo = useNewDatabaseEnumInfo(() => Object.values(db));
+
+    // Search //
+    const searchIndex = useNewSearchIndex(() => Object.values(db));
+
+    // Decks //
     const [deckStore, deckStoreActions] = useNewDeckStore((): DeckStore => ({
         decks: new Map<string, Deck>([
             ["Database",      {cards: new Map(Object.values(db).map((v): [Card, EntryProperties] => [v, {qty: null, tags: []}]))}],
@@ -20,15 +30,9 @@ export function App({db}: {db: Record<string, Card>}) {
             ["Considerboard", {cards: new Map()}],
         ])
     }));    
-
     const deckIds = useMemo(() => Array.from(deckStore.decks.keys()), []); 
-    const columnWidth = useMemo(() => 40*getTextSizes(document.body)[0], []);
-    const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
-    const screenWidth = useElementWidth(rootRef, 640);
-    const columns = calcColumns(screenWidth, columnWidth, 2, deckIds.length);
-
-    const searchIndex = useNewSearchIndex(() => Object.values(db));
     
+    // Views //
     const [deckViews, deckViewActions] = useNewDeckViewStore(() => ({
         activeView: 0,
         views: deckIds.map(deck => ({
@@ -37,23 +41,32 @@ export function App({db}: {db: Record<string, Card>}) {
             viewFilter: null
         }))
     }));
+    
+    // Column Display Management //
+    const columnWidth = useMemo(() => 40*getTextSizes(document.body)[0], []);
+    const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
+    const screenWidth = useElementWidth(rootRef, 640);
+    const columns = calcColumns(screenWidth, columnWidth, 2, deckIds.length);
 
-    return <SearchIndexProvider searchIndex={searchIndex}>
-        <div 
-            class="app"
-            ref={setRootRef} 
-            style={{gridTemplateColumns: `repeat(${columns}, 1fr)`}}
-        >
-            {Array.from({length: columns}, (_, index) => <DeckViewMemoized 
-                key={index}
-                index={index}
-                deckViews={deckViews}
-                deckViewActions={deckViewActions}
-                deckStore={deckStore}
-                deckStoreActions={deckStoreActions}
-            />)}
-        </div>
-    </SearchIndexProvider>;
+    // Application Root //
+    return <DatabaseEnumInfoProvider enumInfo={dbEnumInfo}>
+        <SearchIndexProvider searchIndex={searchIndex}>
+            <div 
+                className="app-content"
+                ref={setRootRef} 
+                style={{gridTemplateColumns: `repeat(${columns}, 1fr)`}}
+            >
+                {Array.from({length: columns}, (_, index) => <DeckViewMemoized 
+                    key={index}
+                    index={index}
+                    deckViews={deckViews}
+                    deckViewActions={deckViewActions}
+                    deckStore={deckStore}
+                    deckStoreActions={deckStoreActions}
+                />)}
+            </div>
+        </SearchIndexProvider>
+    </DatabaseEnumInfoProvider>;
 }
 
 function calcColumns(

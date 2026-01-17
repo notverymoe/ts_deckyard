@@ -20,7 +20,9 @@
         }
 
         > .deck-view-column-header {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25em;
         }
 
         > .deck-view-column-deck {

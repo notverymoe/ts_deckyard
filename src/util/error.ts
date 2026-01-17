@@ -8,7 +8,7 @@
  *   then it will be displayed as a raw value.
  * - Otherwise an unknown error string will be returned.
  */
-export function formatError(error: unknown): String {
+export function formatError(error: unknown): string {
     if (error instanceof Error) {
         return `<${error.name} - ${error.message}>`;
     } else if ((error == null) || ((typeof error != "object") &&  (typeof error != "function"))) {

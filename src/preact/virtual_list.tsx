@@ -1,8 +1,9 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
 import type { JSX } from "preact/jsx-runtime";
-import { useElementHeight } from "./use_size";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "preact/hooks";
+
+import { useElementHeight } from "./use_size";
 
 function useClampedStartIndex(count: number, displayRowsMax: number): [number, (value: number) => void] {
     const [startIndex, setStartIndex] = useState(0);
@@ -134,8 +135,10 @@ export function VirtualList({maxRows, calculateRowCount: calculateDisplayRows, r
            We create the full-height box with no content, as
            this allows us to get around async scrolling positioning
            issues by allowing us to use sticky positioning
+
+           Space already reserved by the sticky display above.
         */}
-        <div style={{ height: (containerHeight ?? 0) + maxRows - displayRowsMax }} />
+        <div style={{ height: maxRows - displayRowsMax }} />
     </div>;
 
 

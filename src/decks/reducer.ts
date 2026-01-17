@@ -1,9 +1,11 @@
 // // Copyright 2026 Natalie Baker // AGPLv3 // //
 
-import type { Card } from "../mtgjson/database";
 import { type Draft } from "immer";
-import type { DeckStore, EntryProperties, Deck } from "./context";
+
+import type { Card } from "../mtgjson/database";
 import { underlying, type ImmerReturn } from "../util/immer";
+
+import type { DeckStore, EntryProperties, Deck } from "./context";
 
 export type DeckListsActions = 
     // Card Actions

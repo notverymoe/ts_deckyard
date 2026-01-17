@@ -2,7 +2,6 @@
 
 let cachedTextSizeRoot: [number, number] | undefined;
 
-
 export function getTextSizeRoot(): [number, number] {
     if (!cachedTextSizeRoot) cachedTextSizeRoot = getTextSizes(document.body);
     return cachedTextSizeRoot;
