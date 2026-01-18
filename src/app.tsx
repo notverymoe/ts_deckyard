@@ -4,7 +4,7 @@ import "./app.css";
 
 import { useMemo, useState } from 'preact/hooks';
 
-import { useNewDeckStore, type Deck, type DeckStore, type EntryProperties } from './decks/context';
+import { resetDeckStoreWithDatabase, useNewDeckStore, type DeckStore, type EntryProperties } from './decks/context';
 import { getTextSizes } from './util/size';
 import { useElementWidth } from './preact/use_size';
 import type { Card } from "./mtgjson/database";
@@ -15,6 +15,7 @@ import { SearchIndexProvider, useNewSearchIndex } from "./search";
 import { DatabaseEnumInfoProvider, useNewDatabaseEnumInfo } from "./dbenum";
 import { MenuBar } from "./components/menubar";
 
+
 export function App({db}: {db: Record<string, Card>}) {
     // Enums // 
     const dbEnumInfo = useNewDatabaseEnumInfo(() => Object.values(db));
@@ -23,14 +24,11 @@ export function App({db}: {db: Record<string, Card>}) {
     const searchIndex = useNewSearchIndex(() => Object.values(db));
 
     // Decks //
-    const [deckStore, deckStoreActions] = useNewDeckStore((): DeckStore => ({
-        decks: new Map<string, Deck>([
-            ["Database",      {cards: new Map(Object.values(db).map((v): [Card, EntryProperties] => [v, {qty: null, tags: []}]))}],
-            ["Mainboard",     {cards: new Map()}],
-            ["Sideboard",     {cards: new Map()}],
-            ["Considerboard", {cards: new Map()}],
-        ])
-    }));    
+    const [deckStore, deckStoreActions] = useNewDeckStore((): DeckStore => {
+        return resetDeckStoreWithDatabase({ 
+            cards: new Map(Object.values(db).map((v): [Card, EntryProperties] => [v, { qty: null, tags: [] }])) 
+        });
+    });    
     const deckIds = useMemo(() => Array.from(deckStore.decks.keys()), []); 
     
     // Views //

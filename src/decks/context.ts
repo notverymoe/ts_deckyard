@@ -55,11 +55,6 @@ export class DeckStoreActions {
 
 }
 
-// export const DeckListsContext = createContext<[DeckStore, DeckStoreActions]>([
-//     createDefaultDeckStore(),
-//     new DeckStoreActions(() => { throw new Error("Uninitialized deck list context state.") }),
-// ]);
-
 export function useNewDeckStore(init?: () => DeckStore): [DeckStore, DeckStoreActions] {
     const [deckLists, dispatch] = useImmerReducer<DeckStore, DeckListsActions, unknown>(
         deckListReducer, 
@@ -70,6 +65,14 @@ export function useNewDeckStore(init?: () => DeckStore): [DeckStore, DeckStoreAc
     return [deckLists, wrapped];
 }
 
-// export function useDeckStore() {
-//     return useContext(DeckListsContext);
-// }
+
+export function resetDeckStoreWithDatabase(database: Deck): DeckStore {
+    return {
+        decks: new Map<string, Deck>([
+            ["Database",      database],
+            ["Mainboard",     {cards: new Map()}],
+            ["Sideboard",     {cards: new Map()}],
+            ["Considerboard", {cards: new Map()}],
+        ])
+    };
+}
