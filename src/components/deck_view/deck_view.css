@@ -53,7 +53,7 @@
 
         > .deck-view-column-info {
             display: block;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 5 / 4;
             background-color: var(--bs-dark-bg-subtle);
             border-radius: 0.5ch;
             overflow: auto;
