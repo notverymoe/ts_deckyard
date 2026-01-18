@@ -62,6 +62,7 @@ export function transformCardAtomicFile(byName: CardAtomicFile): CardsByUID {
         Object.values(byName.data).flatMap(faces => faces), 
         getUID,
         (dest, face) => {
+            if (face.layout === "reversible_card") return dest; // Discard reversible faces
             dest = dest ?? {uid: getUID(face), name: face.name, faces: []};
             dest.faces.push(face);
             return dest;
@@ -75,12 +76,17 @@ export function transformCardAtomicFile(byName: CardAtomicFile): CardsByUID {
 function groupBy<T, D>(
     iterable: Iterable<T>, 
     predictate: (v: T) => string,
-    update: (dest: D | undefined, v: T) => D,
+    update: (dest: D | undefined, v: T) => D | undefined,
 ): Record<string, D> {
     const result: Record<string, D> = {};
     for(const item of iterable) {
         const k = predictate(item);
-        result[k] = update(result[k], item);
+        const nv = update(result[k], item);
+        if (nv !== undefined) {
+            result[k] = nv;
+        } else {
+            delete result[k];
+        }
     }
     return result;
 }
